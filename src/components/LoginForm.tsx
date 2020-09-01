@@ -4,12 +4,15 @@ import axios from 'axios'
 import './login.css'
 
 interface IProps {
+    showing: boolean,
+    heandler: any
 }
 
 interface IState {
     username: string,
     password: string,
-    message: string
+    message: string,
+    showing: boolean
 }
 
 class  LoginForm extends React.Component<IProps, IState> {
@@ -19,7 +22,8 @@ class  LoginForm extends React.Component<IProps, IState> {
         this.state ={
                 username: '',
                 password: '',
-                message: ''
+                message: '',
+                showing: this.props.showing
             };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,6 +35,8 @@ class  LoginForm extends React.Component<IProps, IState> {
             [e.target.name]:e.target.value
         });
     }
+
+
 
     private handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
@@ -79,6 +85,11 @@ class  LoginForm extends React.Component<IProps, IState> {
 
 
     render() {
+
+        if(!this.props.showing){
+            return null;
+        }
+
         return (
          <div id='container'>
             <div className="loginForm">
@@ -93,7 +104,10 @@ class  LoginForm extends React.Component<IProps, IState> {
                     </Form.Field>
                     <Form.Field>
                         <label>{this.state.message}</label>
-                     </Form.Field>
+                    </Form.Field>
+                    <Form.Field>
+                        <a  onClick={this.props.heandler} ><label>Dont have acc? SignIn!</label></a>
+                    </Form.Field>
                     <Button id = "loginBtn" primary type='submit'>Submit</Button>
                 </Form>
             </div>

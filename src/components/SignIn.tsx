@@ -4,6 +4,8 @@ import axios from 'axios'
 import './signIn.css'
 
 interface IProps {
+    showing: boolean,
+    heandler: any
 }
 
 interface IState {
@@ -11,7 +13,8 @@ interface IState {
     password: string,
     message: string,
     email: string,
-    identificationNumber: string
+    identificationNumber: string,
+    showing: boolean
 }
 
 class  SignIn extends React.Component<IProps, IState> {
@@ -23,7 +26,8 @@ class  SignIn extends React.Component<IProps, IState> {
             password: '',
             message: '',
             email: '',
-            identificationNumber: ''
+            identificationNumber: '',
+            showing: this.props.showing
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -86,9 +90,12 @@ class  SignIn extends React.Component<IProps, IState> {
 
 
     render() {
+
+        if (!this.props.showing) return null;
+
         return (
-            <div id='container'>
-                <div className="loginForm">
+            <div  id='container'>
+                <div hidden={!this.state.showing} className="loginForm">
                     <Form id = 'login' onSubmit={this.handleSubmit}>
                         <Form.Field>
                             <label>Username</label>
@@ -108,6 +115,9 @@ class  SignIn extends React.Component<IProps, IState> {
                         </Form.Field>
                         <Form.Field>
                             <label>{this.state.message}</label>
+                        </Form.Field>
+                        <Form.Field>
+                            <a  onClick={this.props.heandler} ><label>Login!</label></a>
                         </Form.Field>
                         <Button id = "loginBtn" primary type='submit'>Submit</Button>
                     </Form>
