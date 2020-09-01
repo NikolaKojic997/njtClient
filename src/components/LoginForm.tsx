@@ -1,6 +1,8 @@
 import React from 'react';
-import {Button, Checkbox, Form} from "semantic-ui-react";
+import {Button, Form, Input} from "semantic-ui-react";
 import axios from 'axios'
+import './login.css'
+
 interface IProps {
 }
 
@@ -78,24 +80,27 @@ class  LoginForm extends React.Component<IProps, IState> {
 
     render() {
         return (
+         <div id='container'>
             <div className="loginForm">
-                <Form onSubmit={this.handleSubmit}>
+                <Form id = 'login' onSubmit={this.handleSubmit}>
                     <Form.Field>
                         <label>Username</label>
-                        <input placeholder='username' name = 'username' value={this.state.username} onChange={this.handleChange}/>
+                        <Input icon='user outline' iconPosition='left' placeholder='username' name = 'username' value={this.state.username} onChange={this.handleChange}/>
                     </Form.Field>
                     <Form.Field>
                         <label>Password</label>
-                        <input type='password' placeholder='password' name = 'password' value={this.state.password} onChange={this.handleChange} />
+                        <Input icon='lock' iconPosition='left' type='password' placeholder='password' name = 'password' value={this.state.password} onChange={this.handleChange} />
                     </Form.Field>
                     <Form.Field>
                         <label>{this.state.message}</label>
                      </Form.Field>
-                    <Button type='submit'>Submit</Button>
+                    <Button id = "loginBtn" primary type='submit'>Submit</Button>
                 </Form>
             </div>
+         </div>
         );
     }
 }
 
 export default LoginForm;
+
