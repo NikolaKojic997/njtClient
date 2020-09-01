@@ -1,0 +1,20 @@
+#container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+
+
+.loginForm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    height: 70%;
+    box-shadow: 5px 5px 30px grey;
+    background: #fffcf6;
+
+}
