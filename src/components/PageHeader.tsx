@@ -1,61 +1,56 @@
 import React, { Component } from 'react'
 import { Menu } from 'semantic-ui-react'
+const useHistory = require("react-router-dom").useHistory
 
 
 interface IProps {
-
-}
-
-interface IState {
     activeItem: string
 }
 
+interface IState {
 
-export default class PageHeader extends React.Component<IProps, IState> {
+}
 
-    constructor(props: IProps) {
-        super(props);
-        this.state ={
-            activeItem: 'editorials'
-        };
-        this.handleItemClick = this.handleItemClick.bind(this);
 
-    }
+function PageHeader(props:IProps)  {
 
-    handleItemClick = (e: any, {name}:any  ) => {
-        this.setState({ activeItem: name }
-        )
-    }
 
-    render() {
-        const { activeItem } = this.state
+     let history = useHistory();
 
-        return (
+     return (
             <Menu>
                 <Menu.Item
-                    name='editorials'
-                    active={activeItem === 'editorials'}
-                    onClick={this.handleItemClick}
+                    name='Employee'
+                    active={props.activeItem === 'Employee'}
+                    onClick ={() => {
+                        history.push('/Employee')
+                    }}
                 >
-                    Editorials
+                    Employee
                 </Menu.Item>
 
                 <Menu.Item
-                    name='reviews'
-                    active={activeItem === 'reviews'}
-                    onClick={this.handleItemClick}
+                    name='Assistents'
+                    active={props.activeItem === 'Assistents'}
+                    onClick ={() => {
+                        history.push('/Assistents')
+                    }}
                 >
-                    Reviews
+                    Assistents
                 </Menu.Item>
 
                 <Menu.Item
-                    name='upcomingEvents'
-                    active={activeItem === 'upcomingEvents'}
-                    onClick={this.handleItemClick}
-                >
-                    Upcoming Events
+                    name='Teachers'
+                    active={props.activeItem === 'Teachers'}
+                    onClick ={() => {
+                        history.push('/Teachers')
+                    }}
+                 >
+                    Teachers
                 </Menu.Item>
             </Menu>
-        )
-    }
+     )
+
 }
+
+export default PageHeader;

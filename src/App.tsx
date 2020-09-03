@@ -7,6 +7,8 @@ import SignIn from "./components/SignIn";
 import ConfirmForm from "./components/ConfirmForm";
 import UserTable from "./components/UserTable";
 import PageHeader from "./components/PageHeader";
+import AssistentsTable from "./components/AssistentsTable";
+import TeachersTable from "./components/TeachersTable";
 
 
 const BrowserRouter = require("react-router-dom").BrowserRouter;
@@ -55,9 +57,17 @@ class  App extends React.Component<IProps, IState> {
                 <Route exact  path="/confirmation/:id">
                     <ConfirmForm message={"Are you sure that you want to confirm activation of your account?"}/>
             </Route>
-                <Route exact  path="/table">
-                    <PageHeader/>
+                <Route exact  path="/Employee">
+                    <PageHeader activeItem={"Employee"}/>
                     <UserTable/>
+                </Route>
+                <Route exact  path="/Assistents">
+                    <PageHeader activeItem={"Assistents"}/>
+                    <AssistentsTable/>
+                </Route>
+                <Route exact  path="/Teachers">
+                    <PageHeader activeItem={"Teachers"}/>
+                    <TeachersTable/>
                 </Route>
         </Switch>
         </BrowserRouter>
