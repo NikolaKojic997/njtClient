@@ -10,6 +10,8 @@ import PageHeader from "./components/PageHeader";
 import AssistentsTable from "./components/AssistentsTable";
 import TeachersTable from "./components/TeachersTable";
 import {Button} from "semantic-ui-react";
+import AddUser from "./components/AddUser";
+import axios from "axios";
 
 
 const BrowserRouter = require("react-router-dom").BrowserRouter;
@@ -37,6 +39,7 @@ class  App extends React.Component<IProps, IState> {
         };
 
         this.handler = this.handler.bind(this)
+
     }
 
     handler= ()=> {
@@ -47,6 +50,8 @@ class  App extends React.Component<IProps, IState> {
 
 
     }
+
+
     render() {
     return (
         <BrowserRouter>
