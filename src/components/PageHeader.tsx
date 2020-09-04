@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu } from 'semantic-ui-react'
+import {Button, Menu} from 'semantic-ui-react'
 const useHistory = require("react-router-dom").useHistory
 
 
@@ -18,6 +18,7 @@ function PageHeader(props:IProps)  {
      let history = useHistory();
 
      return (
+
             <Menu>
                 <Menu.Item
                     name='Employee'
@@ -49,6 +50,8 @@ function PageHeader(props:IProps)  {
                     Teachers
                 </Menu.Item>
             </Menu>
+
+
      )
 
 }

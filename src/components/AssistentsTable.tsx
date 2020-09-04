@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'semantic-ui-react'
+import {Button, Table} from 'semantic-ui-react'
 import axios from 'axios'
 
 
@@ -39,6 +39,7 @@ export default class AssistentsTable extends React.Component<IProps, IState> {
             activeItem: 0
         }
         this.handleClick = this.handleClick.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     async componentDidMount(){
@@ -63,8 +64,27 @@ export default class AssistentsTable extends React.Component<IProps, IState> {
         });
     }
 
+    handleDelete = async ()=> {
+        let activeItem = this.state.activeItem;
+        await axios.delete('http://localhost:8080/employee/' + this.state.activeItem)
+            .then(res => {
+                console.log(res);
+                alert("Employee deleted")
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        this.setState(
+            {
+                users: this.state.users.filter(obj => obj.employeeId !== activeItem),
+                activeItem: 0
+            }
+        )
+    }
+
     render(){
         return(
+            <div>
             <Table celled selectable>
                 <Table.Header>
                     <Table.Row>
@@ -93,6 +113,12 @@ export default class AssistentsTable extends React.Component<IProps, IState> {
 
                 </Table.Body>
             </Table>
+            <div>
+                <Button>Add new</Button>
+                <Button>Update</Button>
+                <Button disabled={this.state.activeItem === 0} onClick={this.handleDelete}>Delete</Button>
+            </div>
+         </div>
         )
     }
 }
