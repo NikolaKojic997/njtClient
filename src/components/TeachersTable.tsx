@@ -1,6 +1,8 @@
 import React from 'react'
-import {Button, Table} from 'semantic-ui-react'
+import {Button, Modal, Table} from 'semantic-ui-react'
 import axios from 'axios'
+import AddAssistant from "./AddAssistent";
+import AddTeacher from "./AddTeacher";
 
 
 
@@ -32,7 +34,8 @@ interface IProps {
 
 interface IState {
     users: Teacher[],
-    activeItem: number
+    activeItem: number,
+    modalOpen: boolean
 
 }
 
@@ -42,7 +45,8 @@ export default class TeachersTable extends React.Component<IProps, IState> {
         super(props);
         this.state ={
             users: [],
-            activeItem: 0
+            activeItem: 0,
+            modalOpen: false
         }
         this.handleClick = this.handleClick.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
@@ -68,6 +72,13 @@ export default class TeachersTable extends React.Component<IProps, IState> {
             ...this.state,
             activeItem:id
         });
+    }
+
+    handleAddUser = (emp: Teacher) =>{
+        this.setState({
+            modalOpen: false,
+            users: [...this.state.users, emp]
+        })
     }
 
     handleDelete = async ()=> {
@@ -122,10 +133,21 @@ export default class TeachersTable extends React.Component<IProps, IState> {
                 </Table.Body>
             </Table>
                 <div >
-                    <Button>Add new</Button>
+                    <Button onClick={()=> this.setState({modalOpen:true})}>Add new</Button>
                     <Button>Update</Button>
                     <Button disabled={this.state.activeItem === 0} onClick={this.handleDelete}>Delete</Button>
                 </div>
+                <Modal
+                    open={this.state.modalOpen}
+                    onClose={()=> this.setState({
+                        modalOpen: false
+                    })}
+                    closeIcon>
+                    <Modal.Header>Add User</Modal.Header>
+                    <Modal.Content>
+                        <AddTeacher closeModal={this.handleAddUser} />
+                    </Modal.Content>
+                </Modal>
             </div>
         )
     }
