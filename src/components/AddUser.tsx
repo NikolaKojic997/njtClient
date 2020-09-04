@@ -62,7 +62,18 @@ class  AddUser extends React.Component<IProps, IState> {
                 this.props.closeModal(res.data);
             })
             .catch(error =>{
-                console.log(error.response)
+                if (error.response) {
+                    this.setState({
+                        ...this.state,
+                        message: ''
+                    });
+                    for (let i = 0; i<error.response.data.details.length; i++) {
+                        this.setState({
+                            ...this.state,
+                            message: this.state.message + "\n" +  error.response.data.details[i]
+                        });
+                    }
+                }
             })
 
 
