@@ -4,13 +4,28 @@ import axios from 'axios'
 
 
 interface IProps {
-    closeModal: any
+    closeModal: any,
+    activeAssistent: Assistent | undefined
 }
 
-interface Title{
+interface DropDownItem{
     key: number,
     value: number,
     text: string
+}
+
+interface Title{
+    titleID: number,
+    titleName: string
+}
+
+interface Assistent  {
+    employeeId: number,
+    employmentDate: string,
+    identificationNumber: string,
+    name: string,
+    surname: string,
+    title: Title
 }
 
 interface IState {
@@ -19,7 +34,7 @@ interface IState {
     employmentDate: string,
     identificationNumber: string,
     message: string,
-    titles: Title[];
+    titles: DropDownItem[];
     selectedTitle: number
 }
 
@@ -74,31 +89,67 @@ class  AddAssistant extends React.Component<IProps, IState> {
 
         }
 
-        await axios.post('http://localhost:8080/employee/assistants', user, config)
-            .then(res => {
-                alert("Assistent added succesfully!")
-                this.props.closeModal(res.data);
-            })
-            .catch(error =>{
-                if (error.response) {
-                    this.setState({
-                        ...this.state,
-                        message: ''
-                    });
-                    for (let i = 0; i<error.response.data.details.length; i++) {
+        if(!this.props.activeAssistent) {
+
+            await axios.post('http://localhost:8080/employee/assistants', user, config)
+                .then(res => {
+                    alert("Assistent added succesfully!")
+                    this.props.closeModal(res.data);
+                })
+                .catch(error => {
+                    if (error.response) {
                         this.setState({
                             ...this.state,
-                            message: this.state.message + "\n" +  error.response.data.details[i]
+                            message: ''
                         });
+                        for (let i = 0; i < error.response.data.details.length; i++) {
+                            this.setState({
+                                ...this.state,
+                                message: this.state.message + "\n" + error.response.data.details[i]
+                            });
+                        }
                     }
-                }
-            })
+                })
 
+        }
+        else{
+            await axios.put('http://localhost:8080/employee/assistants/'+this.props.activeAssistent.employeeId, user, config)
+                .then( res => {
+                    alert("Assistent updated succesfully!")
+                    this.props.closeModal(res.data);
+                })
+                .catch(err => {
+                    if (err.response) {
+                        this.setState({
+                            ...this.state,
+                            message: ''
+                        });
+                        for (let i = 0; i < err.response.data.details.length; i++) {
+                            this.setState({
+                                ...this.state,
+                                message: this.state.message + "\n" + err.response.data.details[i]
+                            });
+                        }
+                    }
+                })
+        }
 
 
     };
 
     async componentDidMount(){
+
+
+        if(this.props.activeAssistent){
+            this.setState({
+                name: this.props.activeAssistent.name,
+                surname: this.props.activeAssistent.surname,
+                employmentDate:this.props.activeAssistent.employmentDate,
+                identificationNumber: this.props.activeAssistent.identificationNumber,
+                selectedTitle: this.props.activeAssistent.title.titleID,
+
+            })
+        }
 
         await axios.get('http://localhost:8080/titles')
             .then(res=> {
@@ -151,6 +202,7 @@ class  AddAssistant extends React.Component<IProps, IState> {
                         options={this.state.titles}
                         name="value"
                         onChange={this.dropdownChange}
+                        value = {this.state.selectedTitle}
                     >
                     </Dropdown>
                 </Form.Field>
