@@ -4,13 +4,34 @@ import axios from 'axios'
 
 
 interface IProps {
-    closeModal: any
+    closeModal: any,
+    activeTeacher: Teacher | undefined
 }
 
 interface DropDpwnItem{
     key: number,
     value: number,
     text: string
+}
+
+interface Title{
+    titleID: number,
+    titleName: string
+}
+
+interface Rank{
+    rankID: number,
+    rankName: string
+}
+
+interface Teacher  {
+    employeeId: number,
+    employmentDate: string,
+    identificationNumber: string,
+    name: string,
+    surname: string,
+    title: Title,
+    rank: Rank
 }
 
 interface IState {
@@ -68,7 +89,7 @@ class  AddTeacher extends React.Component<IProps, IState> {
         e: React.FormEvent<HTMLFormElement>
     ): Promise<void> => {
 
-        let config = {
+         let config = {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -84,31 +105,65 @@ class  AddTeacher extends React.Component<IProps, IState> {
 
         }
 
-        await axios.post('http://localhost:8080/employee/teachers', user, config)
-            .then(res => {
-                alert("Teacher added succesfully!")
-                this.props.closeModal(res.data);
-            })
-            .catch(error =>{
-                if (error.response) {
-                    this.setState({
-                        ...this.state,
-                        message: ''
-                    });
-                    for (let i = 0; i<error.response.data.details.length; i++) {
+        if(!this.props.activeTeacher) {
+
+            await axios.post('http://localhost:8080/employee/teachers', user, config)
+                .then(res => {
+                    alert("Teacher added succesfully!")
+                    this.props.closeModal(res.data);
+                })
+                .catch(error => {
+                    if (error.response) {
                         this.setState({
                             ...this.state,
-                            message: this.state.message + "\n" +  error.response.data.details[i]
+                            message: ''
                         });
+                        for (let i = 0; i < error.response.data.details.length; i++) {
+                            this.setState({
+                                ...this.state,
+                                message: this.state.message + "\n" + error.response.data.details[i]
+                            });
+                        }
                     }
-                }
-            })
+                })
 
-
+        }
+        else{
+            await axios.put('http://localhost:8080/employee/teachers/'+this.props.activeTeacher.employeeId, user, config)
+                .then( res => {
+                    alert("Teacher added succesfully!")
+                    this.props.closeModal(res.data);
+                })
+                .catch(err => {
+                    if (err.response) {
+                        this.setState({
+                            ...this.state,
+                            message: ''
+                        });
+                        for (let i = 0; i < err.response.data.details.length; i++) {
+                            this.setState({
+                                ...this.state,
+                                message: this.state.message + "\n" + err.response.data.details[i]
+                            });
+                        }
+                    }
+                })
+        }
 
     };
 
     async componentDidMount(){
+
+        if(this.props.activeTeacher){
+            this.setState({
+                name: this.props.activeTeacher.name,
+                surname: this.props.activeTeacher.surname,
+                employmentDate:this.props.activeTeacher.employmentDate,
+                identificationNumber: this.props.activeTeacher.identificationNumber,
+                selectedTitle: this.props.activeTeacher.title.titleID,
+                selectedRank: this.props.activeTeacher.rank.rankID
+            })
+        }
 
         await axios.get('http://localhost:8080/titles')
             .then(res=> {
@@ -162,9 +217,6 @@ class  AddTeacher extends React.Component<IProps, IState> {
                     <Input icon='address card' iconPosition='left' placeholder='identification number' name = 'identificationNumber' value={this.state.identificationNumber} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field>
-                    <label>{this.state.message}</label>
-                </Form.Field>
-                <Form.Field>
                     <label>Title</label>
                     <Dropdown
                         placeholder='Title'
@@ -172,6 +224,7 @@ class  AddTeacher extends React.Component<IProps, IState> {
                         selection
                         options={this.state.titles}
                         name="value"
+                        value = {this.state.selectedTitle}
                         onChange={this.dropdownChangeTitle}
                     >
                     </Dropdown>
@@ -184,9 +237,13 @@ class  AddTeacher extends React.Component<IProps, IState> {
                         selection
                         options={this.state.ranks}
                         name="value"
+                        value = {this.state.selectedRank}
                         onChange={this.dropdownChangeRank}
                     >
                     </Dropdown>
+                    <Form.Field>
+                        <label>{this.state.message}</label>
+                    </Form.Field>
                 </Form.Field>
                 <Button id = "loginBtn" primary type='submit'>Submit</Button>
             </Form>
