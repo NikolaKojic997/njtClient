@@ -21,6 +21,15 @@ function PageHeader(props:IProps)  {
 
             <Menu>
                 <Menu.Item
+                    name='MyProfile'
+                    active={props.activeItem === 'MyProfile'}
+                    onClick ={() => {
+                        history.push('/MyProfile')
+                    }}
+                >
+                    MyProfile
+                </Menu.Item>
+                <Menu.Item
                     name='Employee'
                     active={props.activeItem === 'Employee'}
                     onClick ={() => {
@@ -49,6 +58,27 @@ function PageHeader(props:IProps)  {
                  >
                     Teachers
                 </Menu.Item>
+
+                <Menu.Item
+                    name='DeleteAcc'
+                    onClick ={() => {
+                        history.push('/DeleteAcc')
+                    }}
+
+                >
+                    Delete profile
+                </Menu.Item>
+
+                <Menu.Item
+                    name='LogOut'
+                    onClick ={() => {
+                        history.push('/')
+                    }}
+                    position={'right'}
+                >
+                    Log out
+                </Menu.Item>
+
             </Menu>
 
 

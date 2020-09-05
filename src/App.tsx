@@ -9,15 +9,14 @@ import UserTable from "./components/UserTable";
 import PageHeader from "./components/PageHeader";
 import AssistentsTable from "./components/AssistentsTable";
 import TeachersTable from "./components/TeachersTable";
-import {Button} from "semantic-ui-react";
-import AddUser from "./components/AddUser";
-import axios from "axios";
+import MyProfile from "./components/MyProfile";
 
 
 const BrowserRouter = require("react-router-dom").BrowserRouter;
 const Route = require("react-router-dom").Route;
 const Link = require("react-router-dom").Link;
 const Switch = require("react-router-dom").Switch
+const Redirect = require("react-router-dom").Redirect
 
 interface IProps {
 
@@ -26,6 +25,23 @@ interface IProps {
 interface IState {
     showLogin: boolean,
     showSignIn: boolean
+    activeProfile: Profile | undefined,
+    loginSuccess: boolean
+}
+
+interface Employee {
+    name: string,
+    surname: string,
+    identificationNumber: string,
+    employmentDate: string
+}
+
+interface Profile {
+    username: string,
+    password: string,
+    email: string,
+    showing: boolean,
+    employee: Employee
 }
 
 class  App extends React.Component<IProps, IState> {
@@ -35,10 +51,14 @@ class  App extends React.Component<IProps, IState> {
 
         this.state ={
             showLogin: true,
-            showSignIn: false
+            showSignIn: false,
+            activeProfile: undefined,
+            loginSuccess: false
+
         };
 
         this.handler = this.handler.bind(this)
+        this.handleLogin = this.handleLogin.bind(this)
 
     }
 
@@ -47,18 +67,26 @@ class  App extends React.Component<IProps, IState> {
             showSignIn: !this.state.showSignIn,
             showLogin: !this.state.showLogin
         })
+    }
 
-
+    handleLogin(p: Profile) {
+        this.setState({
+            activeProfile: p,
+            loginSuccess: true
+        })
     }
 
 
     render() {
+
     return (
+
         <BrowserRouter>
+            <Redirect to />
             <Switch>
                 <Route exact  path="/" >
-                    <LoginForm  showing={this.state.showLogin} heandler={this.handler} />
-                    <SignIn showing={this.state.showSignIn} heandler={this.handler} />
+                    {this.state.loginSuccess ? <Redirect to="/MyProfile" /> : <LoginForm handleLogin={this.handleLogin} showing={this.state.showLogin} heandler={this.handler} />}
+                     <SignIn showing={this.state.showSignIn} heandler={this.handler} />
                 </Route>
                 <Route exact  path="/confirmation/:id">
                     <ConfirmForm message={"Are you sure that you want to confirm activation of your account?"}/>
@@ -74,6 +102,14 @@ class  App extends React.Component<IProps, IState> {
                 <Route exact  path="/Teachers">
                     <PageHeader activeItem={"Teachers"}/>
                     <TeachersTable/>
+                </Route>
+                <Route exact  path="/MyProfile">
+                <PageHeader activeItem={"MyProfile"}/>
+                <MyProfile activeProfile={this.state.activeProfile}/>
+            </Route>
+                <Route exact  path="/DeleteAcc">
+                    <PageHeader activeItem={"DeleteAcc"}/>
+                    <ConfirmForm message={"Are you sure that you want to delete acc?"}/>
                 </Route>
         </Switch>
         </BrowserRouter>

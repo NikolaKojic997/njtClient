@@ -5,7 +5,8 @@ import './login.css'
 
 interface IProps {
     showing: boolean,
-    heandler: any
+    heandler: any,
+    handleLogin: any
 }
 
 interface IState {
@@ -13,7 +14,24 @@ interface IState {
     password: string,
     message: string,
     showing: boolean
+    activeProfile: Profile|undefined
 }
+
+interface Employee {
+    name: string,
+    surname: string,
+    identificationNumber: string,
+    employmentDate: string
+}
+
+interface Profile {
+    username: string,
+    password: string,
+    email: string,
+    showing: boolean,
+    employee: Employee
+}
+
 
 class  LoginForm extends React.Component<IProps, IState> {
 
@@ -23,7 +41,8 @@ class  LoginForm extends React.Component<IProps, IState> {
                 username: '',
                 password: '',
                 message: '',
-                showing: this.props.showing
+                showing: this.props.showing,
+                activeProfile: undefined
             };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -59,8 +78,10 @@ class  LoginForm extends React.Component<IProps, IState> {
             .then(response => {
                 this.setState({
                     ...this.state,
+                    activeProfile:response.data,
                     message: 'Login succesfull, profile id: '+ response.data.profileId
                 });
+                this.props.handleLogin(response.data)
             })
             .catch(error => {
                 if (error.response) {
