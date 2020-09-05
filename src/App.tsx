@@ -37,6 +37,7 @@ interface Employee {
 }
 
 interface Profile {
+    profileId: number
     username: string,
     password: string,
     email: string,
@@ -59,6 +60,7 @@ class  App extends React.Component<IProps, IState> {
 
         this.handler = this.handler.bind(this)
         this.handleLogin = this.handleLogin.bind(this)
+        this.handleLogOut = this.handleLogOut.bind(this)
 
     }
 
@@ -66,6 +68,13 @@ class  App extends React.Component<IProps, IState> {
         this.setState({
             showSignIn: !this.state.showSignIn,
             showLogin: !this.state.showLogin
+        })
+    }
+
+    handleLogOut= ()=> {
+        this.setState({
+            activeProfile: undefined,
+            loginSuccess: false
         })
     }
 
@@ -85,30 +94,31 @@ class  App extends React.Component<IProps, IState> {
             <Redirect to />
             <Switch>
                 <Route exact  path="/" >
-                    {this.state.loginSuccess ? <Redirect to="/MyProfile" /> : <LoginForm handleLogin={this.handleLogin} showing={this.state.showLogin} heandler={this.handler} />}
+                    {this.state.loginSuccess ? <Redirect to="/MyProfile" /> : <Redirect to="/" />}
+                    <LoginForm handleLogin={this.handleLogin} showing={this.state.showLogin} heandler={this.handler} />
                      <SignIn showing={this.state.showSignIn} heandler={this.handler} />
                 </Route>
                 <Route exact  path="/confirmation/:id">
                     <ConfirmForm message={"Are you sure that you want to confirm activation of your account?"}/>
             </Route>
                 <Route exact  path="/Employee">
-                    <PageHeader activeItem={"Employee"}/>
+                    <PageHeader handleLogOut={this.handleLogOut} activeItem={"Employee"}/>
                     <UserTable/>
                 </Route>
                 <Route exact  path="/Assistents">
-                    <PageHeader activeItem={"Assistents"}/>
+                    <PageHeader handleLogOut={this.handleLogOut} activeItem={"Assistents"}/>
                     <AssistentsTable/>
                 </Route>
                 <Route exact  path="/Teachers">
-                    <PageHeader activeItem={"Teachers"}/>
+                    <PageHeader handleLogOut={this.handleLogOut} activeItem={"Teachers"}/>
                     <TeachersTable/>
                 </Route>
                 <Route exact  path="/MyProfile">
-                <PageHeader activeItem={"MyProfile"}/>
+                <PageHeader handleLogOut={this.handleLogOut} activeItem={"MyProfile"}/>
                 <MyProfile activeProfile={this.state.activeProfile}/>
             </Route>
                 <Route exact  path="/DeleteAcc">
-                    <PageHeader activeItem={"DeleteAcc"}/>
+                    <PageHeader handleLogOut={this.handleLogOut} activeItem={"DeleteAcc"}/>
                     <ConfirmForm message={"Are you sure that you want to delete acc?"}/>
                 </Route>
         </Switch>

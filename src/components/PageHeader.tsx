@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import {Button, Menu} from 'semantic-ui-react'
+import {log} from "util";
+const Link = require("react-router-dom").Link
 const useHistory = require("react-router-dom").useHistory
 
 
 interface IProps {
     activeItem: string
+    handleLogOut: any
 }
 
 interface IState {
@@ -14,6 +17,10 @@ interface IState {
 
 function PageHeader(props:IProps)  {
 
+    function logOut(){
+        props.handleLogOut();
+        history.push('/')
+    }
 
      let history = useHistory();
 
@@ -71,10 +78,9 @@ function PageHeader(props:IProps)  {
 
                 <Menu.Item
                     name='LogOut'
-                    onClick ={() => {
-                        history.push('/')
-                    }}
                     position={'right'}
+                    active={props.activeItem === 'LogOut'}
+                    onClick={()=> logOut()}
                 >
                     Log out
                 </Menu.Item>

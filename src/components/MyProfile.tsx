@@ -11,6 +11,7 @@ interface Employee {
 }
 
 interface Profile {
+    profileId: number,
     username: string,
     password: string,
     email: string,
@@ -48,6 +49,7 @@ class  MyProfile extends React.Component<IProps, IState> {
             updateEnabled: false
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
     }
 
     async componentDidMount(){
@@ -70,6 +72,49 @@ class  MyProfile extends React.Component<IProps, IState> {
             ...this.state,
             [e.target.name]:e.target.value
         });
+    }
+
+    handleUpdate = async ()=> {
+        let config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        let profile = {
+            username: this.state.username,
+            password: this.state.password,
+            email: this.state.email,
+            identificationNumber: this.state.identificationNumber
+        }
+
+        console.log(profile)
+
+        if(this.props.activeProfile) {
+            await axios.put('http://localhost:8080/profiles/' + this.props.activeProfile.profileId, profile, config)
+                .then(res=>{
+                    alert("Profile updated succesfully")
+                    this.setState({
+                        updateEnabled: !this.state.updateEnabled
+                    });
+                })
+                .catch(error =>{
+                    if (error.response) {
+                        this.setState({
+                            ...this.state,
+                            message: ''
+                        });
+                        for (let i = 0; i<error.response.data.details.length; i++) {
+                            this.setState({
+                                ...this.state,
+                                message: this.state.message + "\n" +  error.response.data.details[i]
+                            });
+                        }
+                    }
+                })
+
+
+        }
     }
 
 
@@ -101,12 +146,11 @@ class  MyProfile extends React.Component<IProps, IState> {
                             <label>Password</label>
                             <Input disabled={!this.state.updateEnabled} icon='lock' iconPosition='left' placeholder='password' name = 'password' value={this.state.password} onChange={this.handleChange} />
                         </Form.Field>
-
                         <Form.Field>
                             <label>{this.state.message}</label>
                         </Form.Field>
-                        <Button id = "UpdateBtn"  primary disabled={this.state.updateEnabled} onClick={()=> {this.setState({updateEnabled: true})}} >Update profile</Button>
-                        <Button id = "SubmitBtn"  primary  disabled={!this.state.updateEnabled} onClick={()=> {this.setState({updateEnabled: false})}}>Submit</Button>
+                        <Button id = "UpdateBtn"  primary disabled={this.state.updateEnabled} onClick={()=>this.setState({updateEnabled: true})} >Update profile</Button>
+                        <Button id = "SubmitBtn"  primary  disabled={!this.state.updateEnabled} onClick={()=> this.handleUpdate()}>Submit</Button>
                     </Form>
                 </div>
             </div>
