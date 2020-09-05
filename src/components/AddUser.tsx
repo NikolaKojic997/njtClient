@@ -5,8 +5,15 @@ import axios from 'axios'
 
 interface IProps {
     closeModal: any
+    activeEmp: Employee|undefined
 }
-
+interface Employee  {
+    employeeId: number,
+    employmentDate: string,
+    identificationNumber: string,
+    name: string,
+    surname: string
+}
 interface IState {
     name: string,
     surname: string,
@@ -56,29 +63,64 @@ class  AddUser extends React.Component<IProps, IState> {
 
         }
 
-        await axios.post('http://localhost:8080/employee', user, config)
-            .then(res => {
-                alert("Employee added succesfully!")
-                this.props.closeModal(res.data);
-            })
-            .catch(error =>{
-                if (error.response) {
-                    this.setState({
-                        ...this.state,
-                        message: ''
-                    });
-                    for (let i = 0; i<error.response.data.details.length; i++) {
+        if(!this.props.activeEmp) {
+            await axios.post('http://localhost:8080/employee', user, config)
+                .then(res => {
+                    alert("Employee added succesfully!")
+                    this.props.closeModal(res.data);
+                })
+                .catch(error => {
+                    if (error.response) {
                         this.setState({
                             ...this.state,
-                            message: this.state.message + "\n" +  error.response.data.details[i]
+                            message: ''
                         });
+                        for (let i = 0; i < error.response.data.details.length; i++) {
+                            this.setState({
+                                ...this.state,
+                                message: this.state.message + "\n" + error.response.data.details[i]
+                            });
+                        }
                     }
-                }
-            })
-
+                })
+        }
+        else {
+            await axios.put('http://localhost:8080/employee/'+this.props.activeEmp.employeeId, user, config)
+                .then( res => {
+                    alert("Employee updated succesfully!")
+                    this.props.closeModal(res.data);
+                })
+                .catch(err => {
+                    if (err.response) {
+                        this.setState({
+                            ...this.state,
+                            message: ''
+                        });
+                        for (let i = 0; i < err.response.data.details.length; i++) {
+                            this.setState({
+                                ...this.state,
+                                message: this.state.message + "\n" + err.response.data.details[i]
+                            });
+                        }
+                    }
+                })
+        }
 
 
     };
+
+    async componentDidMount(){
+
+        if(this.props.activeEmp){
+            this.setState({
+                name: this.props.activeEmp.name,
+                surname: this.props.activeEmp.surname,
+                employmentDate:this.props.activeEmp.employmentDate,
+                identificationNumber: this.props.activeEmp.identificationNumber,
+            })
+        }
+
+    }
 
 
     render() {

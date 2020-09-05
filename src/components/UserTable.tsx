@@ -6,7 +6,7 @@ import AddUser from "./AddUser";
 
 interface Employee  {
     employeeId: number,
-    employmentDate: Date,
+    employmentDate: string,
     identificationNumber: string,
     name: string,
     surname: string
@@ -19,7 +19,8 @@ interface IProps {
 interface IState {
     users: Employee[],
     activeItem: number,
-    modalOpen: boolean
+    modalAddOpen: boolean,
+    modalUpdateOpen: boolean
 
 }
 
@@ -30,11 +31,13 @@ export default class UserTable extends React.Component<IProps, IState> {
         this.state ={
             users: [],
             activeItem: 0,
-            modalOpen: false
+            modalAddOpen: false,
+            modalUpdateOpen: false
         }
         this.handleClick = this.handleClick.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddUser = this.handleAddUser.bind(this);
+        this.handleUpdateUser = this.handleUpdateUser.bind(this);
 
     }
 
@@ -82,12 +85,20 @@ export default class UserTable extends React.Component<IProps, IState> {
 
     handleAddUser = (emp: Employee) =>{
         this.setState({
-            modalOpen: false,
+            modalAddOpen: false,
             users: [...this.state.users, emp]
         })
     }
 
-
+    handleUpdateUser = (emp: Employee) =>{
+        this.setState({
+            modalUpdateOpen: false,
+            users: this.state.users.filter( obj => obj.employeeId !== emp.employeeId)
+        })
+        this.setState({
+            users: [...this.state.users, emp]
+        })
+    }
 
 
     render(){
@@ -122,20 +133,33 @@ export default class UserTable extends React.Component<IProps, IState> {
             </Table>
             <div id = 'buttonTab' >
                 <Button onClick={()=> this.setState({
-                    modalOpen: true
+                    modalAddOpen: true
                 })}>Add new</Button>
-                <Button disabled={this.state.activeItem === 0}>Update</Button>
+                <Button disabled={this.state.activeItem === 0} onClick={()=> this.setState({
+                    modalUpdateOpen: true
+                })}>Update</Button>
                 <Button disabled={this.state.activeItem === 0} onClick={this.handleDelete}>Delete</Button>
             </div>
                 <Modal
-                    open={this.state.modalOpen}
+                    open={this.state.modalAddOpen}
                     onClose={()=> this.setState({
-                        modalOpen: false
+                        modalAddOpen: false
                     })}
                     closeIcon>
                     <Modal.Header>Add User</Modal.Header>
                     <Modal.Content>
-                        <AddUser closeModal={this.handleAddUser} />
+                        <AddUser activeEmp={undefined} closeModal={this.handleAddUser} />
+                    </Modal.Content>
+                </Modal>
+                <Modal
+                    open={this.state.modalUpdateOpen}
+                    onClose={()=> this.setState({
+                        modalUpdateOpen: false
+                    })}
+                    closeIcon>
+                    <Modal.Header>Update User</Modal.Header>
+                    <Modal.Content>
+                        <AddUser activeEmp={this.state.users.find(t => t.employeeId === this.state.activeItem)}closeModal={this.handleUpdateUser} />
                     </Modal.Content>
                 </Modal>
             </div>
