@@ -91,16 +91,15 @@ class  App extends React.Component<IProps, IState> {
     return (
 
         <BrowserRouter>
-            <Redirect to />
             <Switch>
                 <Route exact  path="/" >
-                    {this.state.loginSuccess ? <Redirect to="/MyProfile" /> : <Redirect to="/" />}
+                 {this.state.loginSuccess ? <Redirect to="/MyProfile" /> : <Redirect to="/" />}
                     <LoginForm handleLogin={this.handleLogin} showing={this.state.showLogin} heandler={this.handler} />
                      <SignIn showing={this.state.showSignIn} heandler={this.handler} />
                 </Route>
                 <Route exact  path="/confirmation/:id">
-                    <ConfirmForm message={"Are you sure that you want to confirm activation of your account?"}/>
-            </Route>
+                    <ConfirmForm  hendleLogOut = {this.handleLogOut} activeProfile = {this.state.activeProfile} operation={'confirm'} message={"Are you sure that you want to confirm activation of your account?"}/>
+                </Route>
                 <Route exact  path="/Employee">
                     <PageHeader handleLogOut={this.handleLogOut} activeItem={"Employee"}/>
                     <UserTable/>
@@ -119,7 +118,7 @@ class  App extends React.Component<IProps, IState> {
             </Route>
                 <Route exact  path="/DeleteAcc">
                     <PageHeader handleLogOut={this.handleLogOut} activeItem={"DeleteAcc"}/>
-                    <ConfirmForm message={"Are you sure that you want to delete acc?"}/>
+                    <ConfirmForm hendleLogOut = {this.handleLogOut} activeProfile = {this.state.activeProfile} operation={'delete'} message={"Are you sure that you want to delete your acc?"}/>
                 </Route>
         </Switch>
         </BrowserRouter>

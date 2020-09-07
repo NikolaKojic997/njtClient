@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Modal, Table} from 'semantic-ui-react'
+import {Button, Modal, Pagination, Table} from 'semantic-ui-react'
 import axios from 'axios'
 import AddUser from "./AddUser";
 
@@ -162,7 +162,9 @@ export default class UserTable extends React.Component<IProps, IState> {
                         <AddUser activeEmp={this.state.users.find(t => t.employeeId === this.state.activeItem)}closeModal={this.handleUpdateUser} />
                     </Modal.Content>
                 </Modal>
+
             </div>
+
         )
 }
 }

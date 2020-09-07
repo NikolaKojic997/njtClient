@@ -132,11 +132,11 @@ class  MyProfile extends React.Component<IProps, IState> {
                         </Form.Field>
                         <Form.Field>
                             <label>Identification number</label>
-                            <Input icon='lock' iconPosition='left' disabled={true} name = 'identificationNumber' value={this.state.identificationNumber}/>
+                            <Input icon='address card' iconPosition='left' disabled={true} name = 'identificationNumber' value={this.state.identificationNumber}/>
                         </Form.Field>
                         <Form.Field>
                             <label>Email</label>
-                            <Input disabled={!this.state.updateEnabled} icon='user outline' iconPosition='left' placeholder='email' name = 'email' value={this.state.email} onChange={this.handleChange}/>
+                            <Input disabled={!this.state.updateEnabled} icon='mail' iconPosition='left' placeholder='email' name = 'email' value={this.state.email} onChange={this.handleChange}/>
                         </Form.Field>
                         <Form.Field>
                             <label>Username</label>

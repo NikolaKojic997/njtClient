@@ -6,12 +6,32 @@ const Link = require("react-router-dom").Link;
 const useParams = require("react-router-dom").useParams;
 
 interface IProps {
-    message: string
+    message: string,
+    operation: string,
+    activeProfile: Profile|undefined,
+    hendleLogOut: any
 }
 
 interface IState {
 
 }
+
+interface Employee {
+    name: string,
+    surname: string,
+    identificationNumber: string,
+    employmentDate: string
+}
+
+interface Profile {
+    profileId: number
+    username: string,
+    password: string,
+    email: string,
+    showing: boolean,
+    employee: Employee
+}
+
 
 
 
@@ -19,19 +39,35 @@ function  ConfirmForm(props: IProps) {
         let {id} = useParams();
         const history = useHistory();
    async function handleConfirm(id: number){
-        await axios.post('http://localhost:8080/profiles/activate/'+id)
-            .then(response => {
-                alert("Your account is succesfully activated!" )
-            })
-            .catch(error => {
-                if (error.response) {
-                    console.log(error.response)
-                } else if (error.request) {
-                    console.log("This is error request")
-                } else {
-                    console.log("This is just error")
-                }
-            })
+       if(props.operation === 'confirm') {
+           await axios.post('http://localhost:8080/profiles/activate/' + id)
+               .then(response => {
+                   alert("Your account is succesfully activated!")
+               })
+               .catch(error => {
+                   if (error.response) {
+                       console.log(error.response)
+                   } else if (error.request) {
+                       console.log("This is error request")
+                   } else {
+                       console.log("This is just error")
+                   }
+               })
+       }
+       else {
+           if(props.activeProfile)
+           await axios.delete('http://localhost:8080/profiles/' + props.activeProfile.profileId)
+                      .then(res =>{
+                          alert("Your account is succesfully deleted!")
+                      })
+                      .catch(error => {
+                          if (error.response) {
+                              console.log(error.response)
+                          }}
+                      )
+
+       }
+        props.hendleLogOut()
         history.push("/")
     }
 
