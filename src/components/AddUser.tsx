@@ -1,6 +1,11 @@
 import React from 'react';
+// @ts-ignore
+import DatePicker from "react-datepicker";
 import {Button, Form, Input} from "semantic-ui-react";
 import axios from 'axios'
+
+
+
 
 
 interface IProps {
@@ -17,7 +22,7 @@ interface Employee  {
 interface IState {
     name: string,
     surname: string,
-    employmentDate: string,
+    employmentDate: any,
     identificationNumber: string,
     message: string
 }
@@ -134,13 +139,22 @@ class  AddUser extends React.Component<IProps, IState> {
                             <label>Surname</label>
                             <Input icon='lock' iconPosition='left' placeholder='surname' name = 'surname' value={this.state.surname} onChange={this.handleChange} />
                         </Form.Field>
-                        <Form.Field>
-                            <label>Employment Date</label>
-                            <Input icon='mail' iconPosition='left'  placeholder='Employment Date' name = 'employmentDate' value={this.state.employmentDate} onChange={this.handleChange} />
-                        </Form.Field>
+
                         <Form.Field>
                             <label>Identification number</label>
                             <Input icon='address card' iconPosition='left' placeholder='identification number' name = 'identificationNumber' value={this.state.identificationNumber} onChange={this.handleChange} />
+                        </Form.Field>
+
+                        <Form.Field>
+                             <label>Employment Date</label>
+                            {/*<Input icon='mail' iconPosition='left'  placeholder='Employment Date' name = 'employmentDate' value={this.state.employmentDate} onChange={this.handleChange} />*/}
+                             <DatePicker
+                                 dateFormat = 'dd-MM-yyyy'
+                                 selected = {this.state.employmentDate}
+                                 onChange = {(date:any) => this.setState({employmentDate:date})}
+                                 placeholderText="Click to select date..."
+                                 maxDate={new Date()}
+                             />
                         </Form.Field>
                         <Form.Field>
                             <label>{this.state.message}</label>

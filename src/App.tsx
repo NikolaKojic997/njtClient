@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 import LoginForm from "./components/LoginForm";
 import 'semantic-ui-css/semantic.min.css'
@@ -17,6 +18,7 @@ const Route = require("react-router-dom").Route;
 const Link = require("react-router-dom").Link;
 const Switch = require("react-router-dom").Switch
 const Redirect = require("react-router-dom").Redirect
+
 
 interface IProps {
 

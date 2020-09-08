@@ -1,6 +1,8 @@
 import React from 'react';
 import {Button, Dropdown, DropdownProps, Form, Input, Table} from "semantic-ui-react";
 import axios from 'axios'
+// @ts-ignore
+import DatePicker from "react-datepicker";
 
 
 interface IProps {
@@ -182,19 +184,12 @@ class  AddAssistant extends React.Component<IProps, IState> {
                     <Input icon='lock' iconPosition='left' placeholder='surname' name = 'surname' value={this.state.surname} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field>
-                    <label>Employment Date</label>
-                    <Input icon='mail' iconPosition='left'  placeholder='Employment Date' name = 'employmentDate' value={this.state.employmentDate} onChange={this.handleChange} />
-                </Form.Field>
-                <Form.Field>
                     <label>Identification number</label>
                     <Input icon='address card' iconPosition='left' placeholder='identification number' name = 'identificationNumber' value={this.state.identificationNumber} onChange={this.handleChange} />
                 </Form.Field>
+
                 <Form.Field>
                     <label>Title</label>
-
-                </Form.Field>
-                <Form.Field>
-                    <label>{this.state.message}</label>
                     <Dropdown
                         placeholder='Title'
                         fluid
@@ -205,6 +200,22 @@ class  AddAssistant extends React.Component<IProps, IState> {
                         value = {this.state.selectedTitle}
                     >
                     </Dropdown>
+
+                </Form.Field>
+                <Form.Field>
+                    <label>Employment Date</label>
+                    {/*<Input icon='mail' iconPosition='left'  placeholder='Employment Date' name = 'employmentDate' value={this.state.employmentDate} onChange={this.handleChange} />*/}
+                    <DatePicker
+                        dateFormat = 'dd-MM-yyyy'
+                        selected = {this.state.employmentDate}
+                        onChange = {(date:any) => this.setState({employmentDate:date})}
+                        placeholderText="Click to select date..."
+                        maxDate={new Date()}
+                    />
+                </Form.Field>
+                <Form.Field>
+                    <label>{this.state.message}</label>
+
                 </Form.Field>
                 <Button id = "loginBtn" primary type='submit'>Submit</Button>
             </Form>
