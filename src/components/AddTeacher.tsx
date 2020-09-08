@@ -39,7 +39,7 @@ interface Teacher  {
 interface IState {
     name: string,
     surname: string,
-    employmentDate: string,
+    employmentDate: any ,
     identificationNumber: string,
     message: string,
     titles: DropDpwnItem[],
@@ -160,7 +160,7 @@ class  AddTeacher extends React.Component<IProps, IState> {
             this.setState({
                 name: this.props.activeTeacher.name,
                 surname: this.props.activeTeacher.surname,
-                employmentDate:this.props.activeTeacher.employmentDate,
+                employmentDate:new Date(this.props.activeTeacher.employmentDate),
                 identificationNumber: this.props.activeTeacher.identificationNumber,
                 selectedTitle: this.props.activeTeacher.title.titleID,
                 selectedRank: this.props.activeTeacher.rank.rankID

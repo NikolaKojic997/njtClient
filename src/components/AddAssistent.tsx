@@ -33,7 +33,7 @@ interface Assistent  {
 interface IState {
     name: string,
     surname: string,
-    employmentDate: string,
+    employmentDate: any,
     identificationNumber: string,
     message: string,
     titles: DropDownItem[];
@@ -146,7 +146,7 @@ class  AddAssistant extends React.Component<IProps, IState> {
             this.setState({
                 name: this.props.activeAssistent.name,
                 surname: this.props.activeAssistent.surname,
-                employmentDate:this.props.activeAssistent.employmentDate,
+                employmentDate:new Date(this.props.activeAssistent.employmentDate),
                 identificationNumber: this.props.activeAssistent.identificationNumber,
                 selectedTitle: this.props.activeAssistent.title.titleID,
 

@@ -5,9 +5,6 @@ import {Button, Form, Input} from "semantic-ui-react";
 import axios from 'axios'
 
 
-
-
-
 interface IProps {
     closeModal: any
     activeEmp: Employee|undefined
@@ -120,7 +117,7 @@ class  AddUser extends React.Component<IProps, IState> {
             this.setState({
                 name: this.props.activeEmp.name,
                 surname: this.props.activeEmp.surname,
-                employmentDate:this.props.activeEmp.employmentDate,
+                employmentDate:new Date(this.props.activeEmp.employmentDate),
                 identificationNumber: this.props.activeEmp.identificationNumber,
             })
         }
